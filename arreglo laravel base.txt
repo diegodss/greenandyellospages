@@ -1,0 +1,19 @@
+== Al grabar un usuario no muestra mensaje de exito (24/05/2016)
+== al grabar un role no muestra mensaje de role (24/05/2016)
+Al grabar un registro, y pinchar volver, sistema retorna a pantalla de form, deberia volver al listado
+
+---------------
+quando estamos na sub grid, dentro de um producto e excluimos, sistema direciona para tela principal de atributos, deveria voltar para productos
+
+
+Modulo de usuarios
+- login con AD
+- 
+
+modulo de menu:
+trazer items ordenado por id_parent
+quando gravar, e volta, sistema retorna ao form novo. deve voltar ao listado.
+agregar prefixos nas tabelas
+
+corrigir toggle menu copiando de
+D:\Projects\minsal\sicex\dashboard\public\js app.min.js
