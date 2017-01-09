@@ -38,7 +38,7 @@ class User extends Authenticatable {
                     ->where('menu.id_menu_parent', '=', 0)
                     ->where('menu.item_menu', '=', 1);
                 })
-                ->orderBy('order', 'asc')
+                ->orderBy('order_menu', 'asc')
                 ->get();
 
 
@@ -91,7 +91,7 @@ class User extends Authenticatable {
                     ->where('menu.id_menu_parent', '=', $id_menu)
                     ->where('menu.item_menu', '=', 1);
                 })
-                ->orderBy('order', 'asc')
+                ->orderBy('order_menu', 'asc')
                 ->get();
 
         return $usersMains;

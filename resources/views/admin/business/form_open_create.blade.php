@@ -1,0 +1,3 @@
+{!! Form::open(['url' => 'business', 'name' => 'regionForm']) !!}
+{{ Form::hidden('usuario_registra', Auth::user()->id) }}
+{{ Form::hidden('action', 'create') }}

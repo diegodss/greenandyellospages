@@ -41,19 +41,20 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/role/get/json/', 'RoleController@ajaxRole');
 
     Route::resource('/menu', 'MenuController');
-    Route::get('/menu/delete/{id}', 'MenuController@delete');	
+    Route::get('/menu/delete/{id}', 'MenuController@delete');
 
     Route::resource('/comuna', 'ComunaController');
     Route::get('/comuna/delete/{id}', 'ComunaController@delete');
     Route::get('/comuna/get/json/', 'ComunaController@ajaxComuna');
 
-    Route::resource('/region', 'RegionController');
-    Route::get('/region/delete/{id}', 'RegionController@delete');
+    Route::resource('/business', 'BusinessController');
+    Route::get('/business/delete/{id}', 'BusinessController@delete');
+    Route::get('/business/search/list/', 'BusinessController@lists');
 
-	/* 
-	Ejemplo para usar ajax: add y grid
-    Route::get('/controller/get/relacion/{id_}', 'Controller@gridAjaxRelacion');
-    Route::get('/controller/add/relacion/{id_}/{id_relacion}', 'Controller@storeRelacion');
-	*/	
+    /*
+      Ejemplo para usar ajax: add y grid
+      Route::get('/controller/get/relacion/{id_}', 'Controller@gridAjaxRelacion');
+      Route::get('/controller/add/relacion/{id_}/{id_relacion}', 'Controller@storeRelacion');
+     */
 });
 

@@ -58,7 +58,8 @@ return [
       | to any of the locales which will be supported by the application.
       |
      */
-    'locale' => 'es',
+    'locale' => 'pt',
+    'locales' => ['en' => 'English', 'pt' => 'Portuguese'],
     /*
       |--------------------------------------------------------------------------
       | Application Fallback Locale
