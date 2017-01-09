@@ -1,0 +1,86 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews
+    </IfModule>
+
+    RewriteEngine On
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+</IfModule>
+
+#los cookies solo serán enviadas con los request https.
+php_value session.cookie_httponly 1
+php_value session.cookie_secure 1
+
+
+#Codigo de seguridad enviado por Mauricio Soto
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+<Files "wp-login.php">
+    Order deny,allow
+    Deny from all
+    Allow from 10.
+</Files>
+
+<Files wp-register.php>
+	Order Deny,Allow
+	Deny from all
+	    Allow from 10.
+</Files>
+
+<Files readme.html>
+	Order Deny,Allow
+	Deny from all
+	    Allow from 10.
+</Files>
+
+<Files install.php>
+	Order Deny,Allow
+	Deny from all
+	    Allow from 10.
+</Files>
+
+<Files license.txt>
+	Order Deny,Allow
+	Deny from all
+	    Allow from 10.
+</Files>
+
+<Files licencia.txt>
+	Order Deny,Allow
+	Deny from all
+	    Allow from 10.
+</Files>
+
+
+# protect xmlrpc
+<Files xmlrpc.php>
+	Order Deny,Allow
+	Deny from all
+</Files>
+
+# proteger xmlrpc
+<IfModule mod_alias.c>
+	Redirect 301 /xmlrpc.php http://web.minsal.cl/
+</IfModule>
+
+IndexIgnore *
+# Fin de Codigo de seguridad enviado por Mauricio Soto

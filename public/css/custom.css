@@ -1,0 +1,71 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jul 23, 2016, 4:17:33 PM
+    Author     : Diego
+*/
+
+/* CUSTOM CSS DIEGO DA SILVA */
+.items-page {
+    line-height: 34px;
+    margin-right: 20px;
+}
+.row-action{ margin-top: 10px;}
+.row-disable{ color: #ccc}
+.tasks-menu
+, .notifications-menu
+, .messages-menu 
+, .sidebar-menu .header
+, .header-control-sidebar 
+{ display:none !important;}
+
+.required label:after {
+  content:"*";
+  color:red;
+}
+.select2-container--default .select2-selection--single {
+    border: 1px solid #cccccc !important;
+    border-radius: 0px !important;
+    height: 34px !important;
+    padding: 6px 12px !important;
+}
+.form-group { position: relative;}
+.btn-quick-add{ position: absolute; top:0; right:0 ; }
+
+.form-100 { width:100px !important; display: inline-block; margin-right: 4px;}
+label.form-100, label.width-100 { width:100% !important}
+
+.width-468 { width:468px !important; display: inline-block; margin-right: 4px;}
+.width-398 { width:398px !important; display: inline-block; margin-right: 4px;}
+.width-100 { width:100px !important; display: inline-block; margin-right: 4px;}
+
+.textarea-3-lines { height:100px !important; }
+
+.linespace-bottom {margin-bottom: 10px;}
+.navbar-fixed-top, .navbar-fixed-bottom {
+    /*position: fixed;*/
+    right: 0;
+    left: 0;
+    z-index: 1030;
+    margin-bottom: 0;
+}
+.field-tooltip {
+    display:inline-block;
+    /* float:left; display: block;     height: 34px;
+    padding: 6px 12px; */}
+
+/* ============ Override ============= */
+.alert {
+    padding: 6px !important;
+    margin-bottom: 8px  !important;
+}
+.alert-success {
+    color: #008d4c !important;
+    background-color: #dff0d8 !important;
+    border:1px solid #008d4c;
+}
+
+
