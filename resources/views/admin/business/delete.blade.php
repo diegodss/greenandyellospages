@@ -4,7 +4,7 @@
 
 @include('layouts.boxtop')
 
-{!! Form::open(['method' => 'DELETE', 'route'=>['business.destroy', $business->id_business]]) !!}
+{!! Form::open(['method' => 'DELETE', 'route'=>['business.destroy', $business->id_business], 'name' => 'businessForm']) !!}
 <div class="form-group">
     <div class="alert alert-success">¿Quieres eliminar el registro?</div>
 </div>

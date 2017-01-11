@@ -4,8 +4,8 @@
 
 @include('layouts.boxtop')
 
-@include('business.form_open_create')
-@include('business.form')
+@include('admin.business.form_open_create')
+@include('admin.business.form')
 
 @include('layouts.boxbottom')
 @endsection

@@ -129,4 +129,5 @@ return [
     'error.header' => 'Hubo problemas con su entrada',
     'registro_por_pagina' => 'registros por página',
     'permiso_especifico_usuario' => 'Permisos especificos para este usuario',
+	'business' => 'Di Compania', 
 ];

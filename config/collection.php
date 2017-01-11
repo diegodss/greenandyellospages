@@ -3,34 +3,42 @@
 // config/constants.php
 
 return [
-    'criticidad' => array(
-        "" => "Seleccione"
-        , "Alta" => "Alta"
-        , "Media" => "Media"
-        , "Baja" => "Baja")
-    , 'nomenclatura' => array(
-        "PMG" => "PMG"
-        , "NO PMG" => "NO PMG"
-        , "Contraloría General de la República" => "Contraloría General de la República"
-    ), 'estado' => array(
-        "Reprogramado" => "Reprogramado"
-        , "Finalizado" => "Finalizado"
-        , "Vencido" => "Vencido"
-        , "Asume el Riesgo" => "Asume el Riesgo"
-        , "Vigente" => "Vigente"
-        , "Suscripción" => "Suscripción"
-    ), 'condicion' => array(
-        "Reprogramado" => "Reprogramado"
+    /*    'working_days' => array(
+      "1" => "Monday"
+      , "2" => "Tuesday"
+      , "3" => "Wednesday"
+      , "4" => "Thursday"
+      , "5" => "Friday"
+      , "6" => "Saturday"
+      , "7" => "Sunday"
+      )
+     */
+    'working_days' => array(
+        "1" => "Segunda-feira"
+        , "2" => "Terca-feira"
+        , "3" => "Quarta-feira"
+        , "4" => "Quinta-feira"
+        , "5" => "Sexta-feira"
+        , "6" => "Sabado"
+        , "7" => "Domingo"
+    )
+    , 'document_type' => array(
+        "Passaporte" => "Passaporte"
+        , "R.G." => "R.G."
+        , "C.P.F." => "C.P.F."
+    ), 'payment_method_s' => array(
+        "1" => "Dinheiro"
+        , "2" => "Cartao de Credito"
+        , "3" => "Cartao de Debito"
+    ), 'business_type' => array(
+        "Tipo de Empresa" => "Tipo de empresa"
         , "En Proceso" => "En Proceso"
         , "Cumplida Parcial" => "Cumplida Parcial"
-        , "No Cumplida" => "No Cumplida"
-        , "Cumplida" => "Cumplida"
-    // --------- Proceso Auditado --------------
-    ), 'objetivo_auditoria' => array(
+    ), 'business_entity' => array(
         "Gubernamental" => "Gubernamental"
         , "Ministerial" => "Ministerial"
         , "institucional" => "institucional"
-    ), 'actividad_auditoria' => array(
+    ), 'business_scale' => array(
         "Auditoría Interna" => "Auditoría Interna"
         , "Auditoría Externa-Público" => "Auditoría Externa-Público"
         , "Auditoría Externa-Privado" => "Auditoría Externa-Privado"

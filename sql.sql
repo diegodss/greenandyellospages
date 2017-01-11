@@ -1,6 +1,7 @@
 
 https://github.com/mcamara/laravel-localization
 
+
 CREATE TABLE business (
 	id_business INT(11) NOT NULL AUTO_INCREMENT
 	, id_user INT(11) 
@@ -24,6 +25,7 @@ CREATE TABLE business (
 	, business_services VARCHAR(2000) NULL DEFAULT NULL
 	, business_abn VARCHAR(20) NULL DEFAULT NULL
 	, business_tfn VARCHAR(20) NULL DEFAULT NULL
+	, business_approved  TINYINT(1) NULL DEFAULT '0'
 	
 	, fl_status TINYINT(1) NULL DEFAULT '1'
 	, created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP
@@ -53,9 +55,25 @@ CREATE TABLE business_category (
 )
 COMMENT='';
 
+CREATE TABLE business_validity (
+	id_business_validity INT(11) NOT NULL AUTO_INCREMENT
+	, id_business INT(11)
+	, validity_start VARCHAR(8) NULL DEFAULT NULL
+	, validity_end VARCHAR(8) NULL DEFAULT NULL	
+	
+	, fl_status TINYINT(1) NULL DEFAULT '1'
+	, created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP
+	, updated_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+	, usuario_registra INT(11) NULL DEFAULT '0'
+	, usuario_modifica INT(11) NULL DEFAULT '0'
+	, PRIMARY KEY (id_business_validity)
+)
+COMMENT='';
+
 CREATE TABLE business_working_hour (
 	id_business_working_hour INT(11) NOT NULL AUTO_INCREMENT
 	, id_business INT(11)
+	, working_hour_status  INT(11) DEFAULT 1 	// NOVO
 	, working_hour_day INT(11)
 	, working_hour_time_start VARCHAR(20) NULL DEFAULT NULL,
 	, working_hour_time_end  VARCHAR(20) NULL DEFAULT NULL,
@@ -111,6 +129,7 @@ CREATE TABLE business_contact (
 	, contact_name VARCHAR(100) NULL DEFAULT NULL
 	, contact_document VARCHAR(20) NULL DEFAULT NULL
 	, contact_phone VARCHAR(20) NULL DEFAULT NULL
+	, contact_email VARCHAR(50) NULL DEFAULT NULL -- NOVO
 	
 	, fl_status TINYINT(1) NULL DEFAULT '1'
 	, created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP
@@ -126,6 +145,7 @@ COMMENT='';
 CREATE TABLE business_review (
 	id_business_review INT(11) NOT NULL AUTO_INCREMENT,
 	, id_business INT(11)
+	, id_user INT(11)
 	, review_comment VARCHAR(2000) NULL DEFAULT NULL,
 	, review_name VARCHAR(100) NULL DEFAULT NULL,
 	, review_email VARCHAR(100) NULL DEFAULT NULL,
@@ -144,7 +164,7 @@ COMMENT='';
 CREATE TABLE business_payment_method (
 	id_business_payment_method INT(11) NOT NULL AUTO_INCREMENT,
 	, id_business INT(11)
-	, id_payment_method INT(11)
+	, code_payment_method VARCHAR(2)
 	
 	, fl_status TINYINT(1) NULL DEFAULT '1'
 	, created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP
@@ -167,7 +187,7 @@ user_book
 
 CREATE TABLE plan (
 	id_plan INT(11) NOT NULL AUTO_INCREMENT,
-	, plan_name VARCHAR(100) NULL DEFAULT NULL,
+	, plan_name VARCHAR(100) NULL DEFAULT NULL
 	
 	, fl_status TINYINT(1) NULL DEFAULT '1'
 	, created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP
@@ -179,18 +199,35 @@ CREATE TABLE plan (
 COMMENT='';
 
 CREATE TABLE category (
-	id_category INT(11) NOT NULL AUTO_INCREMENT,
-	, category_name VARCHAR(100) NULL DEFAULT NULL,
+	id_category INT(11) NOT NULL AUTO_INCREMENT
+	, category_name VARCHAR(100) NULL DEFAULT NULL
+	, slug VARCHAR(100) NULL DEFAULT NULL
+	, icon VARCHAR(100) NULL DEFAULT NULL
 	
 	, fl_status TINYINT(1) NULL DEFAULT '1'
 	, created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP
 	, updated_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 	, usuario_registra INT(11) NULL DEFAULT '0'
 	, usuario_modifica INT(11) NULL DEFAULT '0'
-	PRIMARY KEY (id_category)
+	, PRIMARY KEY (id_category)
 )
 COMMENT='';
 
+INSERT INTO `category` (`id_category`, `category_name`, `slug`, `icon`) VALUES
+(1, 'Restaurantes', 'restaurantes', 'restaurantes.png'),
+(2, 'Automotivo', 'automotivo', 'automotivo.png'),
+(3, 'Saúde e bem estar', 'saude_bem_estar', 'saude_bem_estar.png'),
+(4, 'Advogados', 'advogados', 'advogados.png'),
+(5, 'Médicos', 'medicos', 'medicos.png'),
+(6, 'Dentistas', 'dentistas', 'dentistas.png'),
+(7, 'Mecânica', 'mecanica', 'mecanica.png'),
+(8, 'Eletricistas', 'eletricistas', 'eletricistas.png'),
+(9, 'Encanadores', 'encanadores', 'encanadores.png'),
+(10, 'Cabeleireiro', 'cabeleireiro', 'cabeleireiro.png'),
+(11, 'Salões de Beleza', 'saloes_beleza', 'saloes_beleza.png'),
+(12, 'Construtores', 'construtores', 'construtores.png'),
+(13, 'Florista', 'florista', 'florista.png');
+		
 CREATE TABLE page (
 	id_page INT(11) NOT NULL AUTO_INCREMENT,
 	, page_name VARCHAR(100) NULL DEFAULT NULL,

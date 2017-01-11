@@ -24,29 +24,30 @@ class Admin {
      * @return mixed
      */
     public function handle($request, Closure $next) {
+        /*
+          // saca el primer parametro de la URI
+          $uri = $request->path();
+          $uri = explode("/", $uri);
+          $uri = $uri[0];
 
-        // saca el primer parametro de la URI
-        $uri = $request->path();
-        $uri = explode("/", $uri);
-        $uri = $uri[0];
 
 
+          $id_usuario = $this->auth->user()->id;
 
-        $id_usuario = $this->auth->user()->id;
+          $menu = Menu::where('slug', '=', $uri)->first();
+          $usuarioPermiso = null;
+          if ($menu) {
+          $usuarioPermiso = UsuarioPermiso::where('id_usuario', '=', $id_usuario)
+          ->where('id_menu', '=', $menu->id_menu)
+          ->first();
+          }
 
-        $menu = Menu::where('slug', '=', $uri)->first();
-        $usuarioPermiso = null;
-        if ($menu) {
-            $usuarioPermiso = UsuarioPermiso::where('id_usuario', '=', $id_usuario)
-                    ->where('id_menu', '=', $menu->id_menu)
-                    ->first();
-        }
-        if (!$usuarioPermiso) {
+          if (!$usuarioPermiso) {
 
-            Session::flash('message-error', 'Sin privilegios');
-            return redirect()->to('home');
-        }
-
+          Session::flash('message-error', 'Sin privilegios');
+          return redirect()->to('home');
+          }
+         */
         return $next($request);
     }
 

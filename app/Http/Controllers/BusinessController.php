@@ -8,7 +8,18 @@ use DB;
 Use App\Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use App\User;
 use App\Business;
+use App\Category;
+use App\Plan;
+use App\BusinessCategory;
+use App\BusinessContact;
+use App\BusinessWorkingHour;
+use App\BusinessMedia;
+use App\BusinessValidity;
+use App\BusinessTag;
+use App\BusinessReview;
+use App\BusinessPaymentMethod;
 
 class BusinessController extends Controller {
 
@@ -25,12 +36,11 @@ class BusinessController extends Controller {
     public function lists() {
 
         $business = Business::all();
-        $returnData['title'] = $this->title;
+        $returnData['title'] = trans('message.business'); // $this->title;
         $returnData['subtitle'] = $this->subtitle;
         $returnData['controller'] = $this->controller;
 
-        $returnData['business'] = trans('message.business'); //$business;
-
+        $returnData['business'] = $business;
 
         return View::make('site.business.index', $returnData);
     }
@@ -77,13 +87,23 @@ class BusinessController extends Controller {
         return View::make('admin.business.index', $returnData);
     }
 
-    public function create() {
+    public function create($id_user) {
+
+        $business = new Business;
+        $business->id_user = $id_user;
+        $returnData['business'] = $business;
+
+        $user = User::find($id_user);
+        $returnData["user"] = $user;
+
 
         $roleMenuPermiso = $role->getRoleSubMenuPermiso(null);
         $role = Role::lists('role', 'id_role');
 
         $auditor = array("1" => "Diego", "2" => "Pepito Perez Sanches");
         $active_directory = array("0" => "No", "1" => "Si");
+
+
 
         $returnData['roleMenuPermiso'] = $roleMenuPermiso;
         $returnData['role'] = $role;
@@ -100,21 +120,57 @@ class BusinessController extends Controller {
             'business_name' => 'required'
         ]);
 
+
         $business = $request->all();
         $business["fl_status"] = $request->exists('fl_status') ? true : false;
-        $region_new = Business::create($business);
+        $business_new = Business::create($business);
+
+        $this->save_business_validity($business->id_business);
 
         $mensage_success = trans('message.saved.success');
 
+        $this->save_media($request, $business_new->id_business);
+
         if ($business["modal"] == "sim") {
             Log::info($business);
-            return $region_new; //redirect()->route('business.index')
+            return $business_new; //redirect()->route('business.index')
         } else {/*
           return redirect()->route('business.index')
           ->with('success', $mensage_success); */
-            return $this->edit($region_new->id_business, true);
+            return $this->edit($business_new->id_business, true);
         }
         //
+    }
+
+    public function save_business_validity($id) {
+        $validity_start = new DateTime(date('d/m/Y'));
+        $validity_end = date('d/m/Y', strtotime("+6 months", strtotime($validity_end)));
+
+        $business_validity = new BusinessValidity();
+        $business_validity->id_business = $id;
+        $business_validity->validity_start = $validity_start;
+        $business_validity->validity_end = $validity_end;
+        $business_validity->save();
+    }
+
+    public function save_business_contact($id, $request) {
+
+        $business_contact = new BusinessContact();
+        $business_contact->id_business = $id;
+        $business_contact->contact_name = $request->contact_name;
+        $business_contact->contact_document_type = $request->contact_document_type;
+        $business_contact->contact_document = $request->contact_document;
+        $business_contact->contact_phone = $request->contact_phone;
+        $business_contact->save();
+    }
+
+    public function renew_business_validity($id) {
+
+        $business_validity = BusinessValidity::where('id_business', '=', $id);
+        $business_validity->fl_status = false;
+        $business_validity->save();
+
+        $this->save_business_validity($id);
     }
 
     public function show($id) {
@@ -132,8 +188,48 @@ class BusinessController extends Controller {
     public function edit($id, $show_success_message = false) {
 
         $business = Business::find($id);
-
         $returnData['business'] = $business;
+
+        $user = User::find($business->id_user);
+        $returnData["user"] = $user;
+
+        $category_s = category::active()->lists('category_name', 'id_category')->all();
+        $returnData['category_s'] = $category_s;
+
+        $business_category = $business->categories()->lists('category.id_category')->all();
+        $returnData['business_category'] = $business_category;
+
+        $plans = Plan::active()->lists('plan_name', 'id_plan')->all();
+        $returnData['plans'] = $plans;
+
+
+        $working_days = config("collection.working_days");
+        $returnData["working_days"] = $working_days;
+
+        $document_type_s = config("collection.document_type");
+        $returnData["document_type_s"] = $document_type_s;
+
+
+
+        /*
+          $i = 0;
+          //for ($i = 0; $i <= count($category); $i++) {
+          foreach ($category as $id_category => $category_name) {
+          $checked = false;
+          if (is_array($business_category))
+          $checked = in_array($id_category, $business_category);
+
+          $i++;
+          $cat_arr[$i]["name"] = $category_name;
+          $cat_arr[$i]["id"] = $id_category;
+          $cat_arr[$i]["test"] = $checked;
+          }
+          Log::info($cat_arr);
+          //$allowed = $role->permissions->lists('id');
+         */
+
+
+
 
         $returnData['title'] = $this->title;
         $returnData['subtitle'] = $this->subtitle;
@@ -147,19 +243,132 @@ class BusinessController extends Controller {
         };
     }
 
+    public function save_business_media($request, $id) {
+        if (isset($request->media)) {
+
+            foreach ($request->media as $file) {
+
+                if (is_object($file)) {
+
+                    $fileName = $file->getClientOriginalName();
+                    $path = base_path() . config('system.folder_business_media') . $id . '/';
+                    if (!File::exists($path)) {
+                        $result = File::makeDirectory($path, 0775);
+                    }
+
+                    $file->move($path, $fileName);
+
+                    $business_media = new BusinessMedia();
+                    $business_media->id_business = $id;
+                    $business_media->media_name = $fileName;
+                    $business_media->media_type = File::extension($fileName);
+                    $business_media->media_path = $path;
+                    $business_media->save();
+                }
+            }
+        }
+    }
+
+    public function save_business_category($id, $request) {
+
+        $business_category = BusinessCategory::where('id_business', '=', $id);
+        $business_category->delete();
+
+        $id_category_request = $request->input('category');
+
+        foreach ($id_category_request as $id_category) {
+
+            //$id_category = $request->input('id_category_' . $i);
+            $business_category = New BusinessCategory;
+            $business_category->id_business = $id;
+            $business_category->id_category = $id_category;
+            //Log::info('salvando: ' . $business_category);
+            $business_category->save();
+            unset($business_category);
+        }
+    }
+
+    public function save_working_hour($id, $request) {
+
+        $id_working_hour = $request->input('id_working_hour');
+
+        foreach ($id_working_hour as $id) {
+
+            //$id_category = $request->input('id_category_' . $i);
+            $business_working_hour = New BusinessWorkingHour;
+            $business_working_hour->id_business = $id;
+            $business_working_hour->working_hour_status = $request->input('working_hour_status_' . $id);
+            $business_working_hour->working_hour_day = $request->input('working_hour_day_' . $id);
+            $business_working_hour->working_hour_time_start = $request->input('working_hour_time_start_' . $id);
+            $business_working_hour->working_hour_time_end = $request->input('working_hour_time_end_' . $id);
+            //Log::info('salvando: ' . $business_category);
+            $business_working_hour->save();
+
+            unset($business_working_hour);
+        }
+    }
+
+    public function save_payment_method($id, $code_payment_method_request) {
+
+        //$this->save_payment_method($id, $request->input('id_payment_method'));
+
+        foreach ($code_payment_method_request as $code_payment_method) {
+
+            $business_payment_method = New BusinessPaymentMethod();
+            $business_payment_method->id_business = $id;
+            $business_payment_method->code_payment_method = $code_payment_method;
+            $business_payment_method->save();
+            unset($business_payment_method);
+        }
+    }
+
+    public function save_business_tag($id, $request) {
+
+        $tags = explode(",", $request->tag);
+
+        foreach ($business_tag as $tag) {
+
+            //$id_category = $request->input('id_category_' . $i);
+            $business_tag = New BusinessTag;
+            $business_tag->id_business = $id;
+            $business_tag->tag_name = $tag;
+            //Log::info('salvando: ' . $business_category);
+            $business_tag->save();
+            unset($business_tag);
+        }
+    }
+
     public function update($id, Request $request) {
 
         $this->validate($request, [
             'business_name' => 'required'
         ]);
 
-        $regionUpdate = $request->all();
-        $regionUpdate["fl_status"] = $request->exists('fl_status') ? true : false;
+        $businessUpdate = $request->all();
+        $businessUpdate["fl_status"] = $request->exists('fl_status') ? true : false;
         $business = Business::find($id);
-        $business->update($regionUpdate);
+        $business->update($businessUpdate);
+
+        $this->save_business_category($id, $request);
+
+        $this->save_media($id, $request);
+
+        $this->save_working_hour($id, $request);
+
+        $this->save_business_contact($id, $request);
+
 
         $mensage_success = trans('message.saved.success');
 
+        /*
+          business_category
+          business_validity
+          business_working_hour
+          business_media
+          business_tag
+          business_contact
+          business_payment_method
+         */
         return $this->edit($id, true);
         /*
           return redirect()->route('business.index')

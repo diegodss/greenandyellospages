@@ -27,6 +27,20 @@ Route::post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
 Route::post('password/reset', 'Auth\PasswordController@reset');
 
 //--------------------------Fin de  Route::auth(); --------------------------
+/* */
+
+/*
+  Route::group(
+  [
+  'prefix' => LaravelLocalization::setLocale()
+  , 'middleware' => ['localeSessionRedirect', 'localizationRedirect'] //
+  ], function() {
+  Route::get('/business/search/list/', 'BusinessController@lists');
+  }); */
+
+
+Route::get('/business/search/list/', 'BusinessController@lists');
+
 
 Route::group(['middleware' => ['auth']], function() {
 
@@ -49,12 +63,13 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('/business', 'BusinessController');
     Route::get('/business/delete/{id}', 'BusinessController@delete');
-    Route::get('/business/search/list/', 'BusinessController@lists');
 
+    Route::resource('/category', 'CategoryController');
+    Route::get('/category/delete/{id}', 'CategoryController@delete');
     /*
       Ejemplo para usar ajax: add y grid
       Route::get('/controller/get/relacion/{id_}', 'Controller@gridAjaxRelacion');
-      Route::get('/controller/add/relacion/{id_}/{id_relacion}', 'Controller@storeRelacion');
+      Route::get('/controller/add/relacion/{id_}/{id_relacion}', 'Controller@storeRelacion ');
      */
 });
 

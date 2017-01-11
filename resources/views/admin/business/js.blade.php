@@ -19,6 +19,14 @@
         $("form[name=regionForm]").validate({
             rules: {
                 business_name: {required: true}
+                , business_phone: {required: true}
+                , business_email: {required: true}
+                , business_address: {required: true}
+                , business_zip: {required: true}
+                , business_latitude: {required: true}
+                , business_longitude: {required: true}
+                , business_about: {required: true}
+                , business_services: {required: true}
             }
         });
 

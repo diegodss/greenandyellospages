@@ -44,4 +44,8 @@ class Business extends Model {
         return $query->where('business_name', 'ilike', '%' . $value . '%');
     }
 
+    public function categories() {
+        return $this->belongsToMany('App\Category', 'business_category', 'id_business', 'id_category');
+    }
+
 }
