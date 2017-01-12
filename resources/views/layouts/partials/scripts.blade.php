@@ -16,6 +16,7 @@
 <script src="{{ asset('/js/select2.min.js') }}"></script>
 <script src="{{ asset('/js/jquery.printElement.min.js') }}"></script>
 <script src="{{ asset('/plugins/datepicker/bootstrap-datepicker.js') }}"></script>
+<script src="{{ asset('/js/bootstrap-timepicker.min.js') }}"></script>
 
 
 

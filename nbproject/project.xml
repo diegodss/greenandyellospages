@@ -7,6 +7,8 @@
         </data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
             <word>Categoria</word>
+            <word>empresa</word>
+            <word>foreach</word>
             <word>MAPA</word>
         </spellchecker-wordlist>
     </configuration>

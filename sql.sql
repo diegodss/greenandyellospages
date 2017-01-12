@@ -1,6 +1,7 @@
 
 https://github.com/mcamara/laravel-localization
 
+http://www.yellowpagesphpscript.com/demo/v5/admin/business
 
 CREATE TABLE business (
 	id_business INT(11) NOT NULL AUTO_INCREMENT
@@ -18,13 +19,14 @@ CREATE TABLE business (
 	, business_latitude VARCHAR(50) NULL DEFAULT NULL
 	, business_longitude VARCHAR(50) NULL DEFAULT NULL
 	, business_website VARCHAR(100) NULL DEFAULT NULL
-	, business_type INT(11) NULL DEFAULT NULL
-	, business_entity INT(11) NULL DEFAULT NULL
+	, business_type  VARCHAR(50) NULL DEFAULT NULL
+	, business_entity VARCHAR(50) NULL DEFAULT NULL
 	, business_scale VARCHAR(50) NULL DEFAULT NULL
 	, business_about VARCHAR(2000) NULL DEFAULT NULL
 	, business_services VARCHAR(2000) NULL DEFAULT NULL
 	, business_abn VARCHAR(20) NULL DEFAULT NULL
 	, business_tfn VARCHAR(20) NULL DEFAULT NULL
+	, business_year_established INT(4) NULL DEFAULT NULL	
 	, business_approved  TINYINT(1) NULL DEFAULT '0'
 	
 	, fl_status TINYINT(1) NULL DEFAULT '1'
@@ -73,10 +75,10 @@ COMMENT='';
 CREATE TABLE business_working_hour (
 	id_business_working_hour INT(11) NOT NULL AUTO_INCREMENT
 	, id_business INT(11)
-	, working_hour_status  INT(11) DEFAULT 1 	// NOVO
+	, working_hour_status  INT(11) DEFAULT 1 
 	, working_hour_day INT(11)
-	, working_hour_time_start VARCHAR(20) NULL DEFAULT NULL,
-	, working_hour_time_end  VARCHAR(20) NULL DEFAULT NULL,
+	, working_hour_time_start VARCHAR(20) NULL DEFAULT NULL
+	, working_hour_time_end  VARCHAR(20) NULL DEFAULT NULL
 	
 	, fl_status TINYINT(1) NULL DEFAULT '1'
 	, created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP
@@ -127,10 +129,11 @@ CREATE TABLE business_contact (
 	id_business_contact INT(11) NOT NULL AUTO_INCREMENT
 	, id_business INT(11)
 	, contact_name VARCHAR(100) NULL DEFAULT NULL
+	, contact_document_type VARCHAR(20) NULL DEFAULT NULL
 	, contact_document VARCHAR(20) NULL DEFAULT NULL
 	, contact_phone VARCHAR(20) NULL DEFAULT NULL
-	, contact_email VARCHAR(50) NULL DEFAULT NULL -- NOVO
-	
+	, contact_email VARCHAR(50) NULL DEFAULT NULL 
+		
 	, fl_status TINYINT(1) NULL DEFAULT '1'
 	, created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP
 	, updated_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -146,17 +149,17 @@ CREATE TABLE business_review (
 	id_business_review INT(11) NOT NULL AUTO_INCREMENT,
 	, id_business INT(11)
 	, id_user INT(11)
-	, review_comment VARCHAR(2000) NULL DEFAULT NULL,
-	, review_name VARCHAR(100) NULL DEFAULT NULL,
-	, review_email VARCHAR(100) NULL DEFAULT NULL,
+	, review_comment VARCHAR(2000) NULL DEFAULT NULL
+	, review_name VARCHAR(100) NULL DEFAULT NULL
+	, review_email VARCHAR(100) NULL DEFAULT NULL
 	
 	, fl_status TINYINT(1) NULL DEFAULT '1'
 	, created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP
 	, updated_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 	, usuario_registra INT(11) NULL DEFAULT '0'
 	, usuario_modifica INT(11) NULL DEFAULT '0'
-	PRIMARY KEY (id_business_review),
-	INDEX INDEX_business_review_id_business(id_business),
+	, PRIMARY KEY (id_business_review)
+	, INDEX INDEX_business_review_id_business(id_business)
 	CONSTRAINT FK_RELATIONSHIP_business_review_id_business FOREIGN KEY (id_business) REFERENCES business (id_business) ON UPDATE CASCADE ON DELETE CASCADE
 )
 COMMENT='';
@@ -171,9 +174,9 @@ CREATE TABLE business_payment_method (
 	, updated_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 	, usuario_registra INT(11) NULL DEFAULT '0'
 	, usuario_modifica INT(11) NULL DEFAULT '0'
-	PRIMARY KEY (id_business_payment_method),
-	INDEX INDEX_business_payment_method_id_business(id_business),
-	CONSTRAINT FK_RELATIONSHIP_business_payment_method_id_business FOREIGN KEY (id_business) REFERENCES business (id_business) ON UPDATE CASCADE ON DELETE CASCADE
+	, PRIMARY KEY (id_business_payment_method)
+	, INDEX INDEX_business_payment_method_id_business(id_business)
+	, CONSTRAINT FK_RELATIONSHIP_business_payment_method_id_business FOREIGN KEY (id_business) REFERENCES business (id_business) ON UPDATE CASCADE ON DELETE CASCADE
 )
 COMMENT='';
 
@@ -186,7 +189,7 @@ user
 user_book
 
 CREATE TABLE plan (
-	id_plan INT(11) NOT NULL AUTO_INCREMENT,
+	id_plan INT(11) NOT NULL AUTO_INCREMENT
 	, plan_name VARCHAR(100) NULL DEFAULT NULL
 	
 	, fl_status TINYINT(1) NULL DEFAULT '1'
@@ -194,9 +197,13 @@ CREATE TABLE plan (
 	, updated_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 	, usuario_registra INT(11) NULL DEFAULT '0'
 	, usuario_modifica INT(11) NULL DEFAULT '0'
-	PRIMARY KEY (id_plan)
+	, PRIMARY KEY (id_plan)
 )
 COMMENT='';
+
+INSERT INTO `plan` (`id_plan`, `plan_name`) VALUES
+(1, 'Gratis'),
+(2, 'Premium');
 
 CREATE TABLE category (
 	id_category INT(11) NOT NULL AUTO_INCREMENT
@@ -256,9 +263,9 @@ CREATE TABLE location (
 COMMENT='';
 
 CREATE TABLE email_template (
-	id_email_template INT(11) NOT NULL AUTO_INCREMENT,
-	, email_template_title VARCHAR(100) NULL DEFAULT NULL,
-	, email_template_content VARCHAR(8000) NULL DEFAULT NULL,
+	id_email_template INT(11) NOT NULL AUTO_INCREMENT
+	, email_template_title VARCHAR(100) NULL DEFAULT NULL
+	, email_template_content VARCHAR(8000) NULL DEFAULT NULL
 	
 	, fl_status TINYINT(1) NULL DEFAULT '1'
 	, created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP
@@ -270,8 +277,8 @@ CREATE TABLE email_template (
 COMMENT='';
 
 CREATE TABLE user_book (
-	id_user_book INT(11) NOT NULL AUTO_INCREMENT,
-	id_user INT(11)
+	id_user_book INT(11) NOT NULL AUTO_INCREMENT
+	, id_user INT(11)
 	
 	, fl_status TINYINT(1) NULL DEFAULT '1'
 	, created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP
@@ -295,7 +302,7 @@ CREATE TABLE  (
 COMMENT='';
 
 CREATE TABLE  (
-	id_ INT(11) NOT NULL AUTO_INCREMENT,
+	id_ INT(11) NOT NULL AUTO_INCREMENT
 	
 	, fl_status TINYINT(1) NULL DEFAULT '1'
 	, created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP

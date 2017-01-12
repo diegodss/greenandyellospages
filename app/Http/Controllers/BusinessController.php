@@ -193,6 +193,22 @@ class BusinessController extends Controller {
         $user = User::find($business->id_user);
         $returnData["user"] = $user;
 
+
+        $business_contact = BusinessContact::where('id_business', $id)->first();
+        if (!is_object($business_contact)) {
+            $business_contact = new BusinessContact();
+        }
+        $returnData["business_contact"] = $business_contact;
+
+
+        $business_media = BusinessContact::where('id_business', $id)->get();
+        $returnData['business_media'] = $business_media;
+
+        $business_working_hour = BusinessWorkingHour::where('id_business', $id)->get();
+        $returnData['$business_working_hour'] = $business_working_hour;
+
+        Log::info($business_working_hour);
+
         $category_s = category::active()->lists('category_name', 'id_category')->all();
         $returnData['category_s'] = $category_s;
 
@@ -203,8 +219,28 @@ class BusinessController extends Controller {
         $returnData['plans'] = $plans;
 
 
+        /* init variables */
         $working_days = config("collection.working_days");
         $returnData["working_days"] = $working_days;
+
+
+        $business_type_s = config("collection.business_type");
+        $returnData["business_type_s"] = $business_type_s;
+
+        $business_entity_s = config("collection.business_entity");
+        $returnData["business_entity_s"] = $business_entity_s;
+
+        $business_scale_s = config("collection.business_scale");
+        $returnData["business_scale_s"] = $business_scale_s;
+
+        $working_day_status_s = config("collection.working_day_status");
+        $returnData["working_day_status_s"] = $working_day_status_s;
+
+
+
+        /* init variables */
+
+
 
         $document_type_s = config("collection.document_type");
         $returnData["document_type_s"] = $document_type_s;
@@ -288,17 +324,18 @@ class BusinessController extends Controller {
         }
     }
 
-    public function save_working_hour($id, $request) {
+    public function save_working_hour($id_business, $request) {
 
-        $id_working_hour = $request->input('id_working_hour');
-
+        $id_working_hour = $request->input('id_working_day');
+        Log::info($request);
+        /**/
         foreach ($id_working_hour as $id) {
 
             //$id_category = $request->input('id_category_' . $i);
             $business_working_hour = New BusinessWorkingHour;
-            $business_working_hour->id_business = $id;
+            $business_working_hour->id_business = $id_business;
             $business_working_hour->working_hour_status = $request->input('working_hour_status_' . $id);
-            $business_working_hour->working_hour_day = $request->input('working_hour_day_' . $id);
+            $business_working_hour->working_hour_day = $id;
             $business_working_hour->working_hour_time_start = $request->input('working_hour_time_start_' . $id);
             $business_working_hour->working_hour_time_end = $request->input('working_hour_time_end_' . $id);
             //Log::info('salvando: ' . $business_category);
@@ -351,7 +388,7 @@ class BusinessController extends Controller {
 
         $this->save_business_category($id, $request);
 
-        $this->save_media($id, $request);
+        $this->save_business_media($id, $request);
 
         $this->save_working_hour($id, $request);
 
