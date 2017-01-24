@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use View;
 use Log;
 use DB;
+use File;
+use Mail;
 Use App\Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -29,8 +31,8 @@ class BusinessController extends Controller {
         $this->title = "Empresas";
         $this->subtitle = "Gestion de empresas";
 
-        //$this->middleware('auth');
-        //$this->middleware('admin');
+//$this->middleware('auth');
+//$this->middleware('admin');
     }
 
     public function lists() {
@@ -132,14 +134,14 @@ class BusinessController extends Controller {
         $this->save_media($request, $business_new->id_business);
 
         if ($business["modal"] == "sim") {
-            Log::info($business);
+            //Log::info($business);
             return $business_new; //redirect()->route('business.index')
         } else {/*
           return redirect()->route('business.index')
           ->with('success', $mensage_success); */
             return $this->edit($business_new->id_business, true);
         }
-        //
+//
     }
 
     public function save_business_validity($id) {
@@ -201,13 +203,16 @@ class BusinessController extends Controller {
         $returnData["business_contact"] = $business_contact;
 
 
-        $business_media = BusinessContact::where('id_business', $id)->get();
+        $business_media = BusinessMedia::where('id_business', $id)->get();
+        //Log::info("MEDIA");
+        //Log::info($business_media);
         $returnData['business_media'] = $business_media;
 
         $business_working_hour = BusinessWorkingHour::where('id_business', $id)->get();
-        $returnData['$business_working_hour'] = $business_working_hour;
+        $returnData['business_working_hour'] = $business_working_hour;
 
-        Log::info($business_working_hour);
+        $business_tag = BusinessTag::where('id_business', $id)->get();
+        $returnData['business_tag'] = $business_tag;
 
         $category_s = category::active()->lists('category_name', 'id_category')->all();
         $returnData['category_s'] = $category_s;
@@ -265,8 +270,6 @@ class BusinessController extends Controller {
          */
 
 
-
-
         $returnData['title'] = $this->title;
         $returnData['subtitle'] = $this->subtitle;
         $returnData['titleBox'] = "Editar Business";
@@ -279,7 +282,10 @@ class BusinessController extends Controller {
         };
     }
 
-    public function save_business_media($request, $id) {
+    public function save_business_media($id, $request) {
+
+        //Log::info($request);
+
         if (isset($request->media)) {
 
             foreach ($request->media as $file) {
@@ -314,11 +320,11 @@ class BusinessController extends Controller {
 
         foreach ($id_category_request as $id_category) {
 
-            //$id_category = $request->input('id_category_' . $i);
+//$id_category = $request->input('id_category_' . $i);
             $business_category = New BusinessCategory;
             $business_category->id_business = $id;
             $business_category->id_category = $id_category;
-            //Log::info('salvando: ' . $business_category);
+//Log::info('salvando: ' . $business_category);
             $business_category->save();
             unset($business_category);
         }
@@ -327,27 +333,26 @@ class BusinessController extends Controller {
     public function save_working_hour($id_business, $request) {
 
         $id_working_hour = $request->input('id_working_day');
-        Log::info($request);
-        /**/
+
         foreach ($id_working_hour as $id) {
 
-            //$id_category = $request->input('id_category_' . $i);
-            $business_working_hour = New BusinessWorkingHour;
-            $business_working_hour->id_business = $id_business;
+            $business_working_hour = BusinessWorkingHour::where('id_business', $id_business)->where('working_hour_day', $id)->first();
+            if (!is_object($business_working_hour)) {
+                $business_working_hour = New BusinessWorkingHour;
+                $business_working_hour->id_business = $id_business;
+                $business_working_hour->working_hour_day = $id;
+            }
             $business_working_hour->working_hour_status = $request->input('working_hour_status_' . $id);
-            $business_working_hour->working_hour_day = $id;
             $business_working_hour->working_hour_time_start = $request->input('working_hour_time_start_' . $id);
             $business_working_hour->working_hour_time_end = $request->input('working_hour_time_end_' . $id);
-            //Log::info('salvando: ' . $business_category);
             $business_working_hour->save();
-
             unset($business_working_hour);
         }
     }
 
     public function save_payment_method($id, $code_payment_method_request) {
 
-        //$this->save_payment_method($id, $request->input('id_payment_method'));
+//$this->save_payment_method($id, $request->input('id_payment_method'));
 
         foreach ($code_payment_method_request as $code_payment_method) {
 
@@ -361,17 +366,17 @@ class BusinessController extends Controller {
 
     public function save_business_tag($id, $request) {
 
-        $tags = explode(",", $request->tag);
+        if ($request->tag != "") {
+            $tags = explode(",", $request->tag);
 
-        foreach ($business_tag as $tag) {
+            foreach ($tags as $tag) {
 
-            //$id_category = $request->input('id_category_' . $i);
-            $business_tag = New BusinessTag;
-            $business_tag->id_business = $id;
-            $business_tag->tag_name = $tag;
-            //Log::info('salvando: ' . $business_category);
-            $business_tag->save();
-            unset($business_tag);
+                $business_tag = New BusinessTag;
+                $business_tag->id_business = $id;
+                $business_tag->tag_name = $tag;
+                $business_tag->save();
+                unset($business_tag);
+            }
         }
     }
 
@@ -392,8 +397,9 @@ class BusinessController extends Controller {
 
         $this->save_working_hour($id, $request);
 
-        $this->save_business_contact($id, $request);
+        //$this->save_business_contact($id, $request);
 
+        $this->save_business_tag($id, $request);
 
         $mensage_success = trans('message.saved.success');
 

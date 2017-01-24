@@ -58,6 +58,39 @@
                 console.log(data);
             }); // fail
         }); // click
+
+        // ----------------
+        $('.btn_eliminar_media').click(function () {
+
+            var token = $(this).data('token');
+            var id_business_media = $(this).attr('href').replace(/^.*?(#|$)/, '');
+            var data_json = {
+                id_business_media: id_business_media
+                , _method: 'delete'
+                , _token: token
+            }
+
+            $('#test').html('enviando...');
+            var request = $.ajax({
+                type: 'post',
+                url: "{{ URL::to('/') }}/business_media/" + id_business_media,
+                data: data_json
+            });
+            request.done(function (data) {
+
+
+                $('#business_media_' + id_business_media).hide();
+                $('#test').html(data);
+
+                //alert(data);
+            });
+            request.fail(function (data, textStatus) {
+                $('#test').html("Error: " + textStatus);
+                console.log(data);
+            }); // fail
+        }); // click
+        //--------------------------------------
+
         // Uso de select2 para campo de business
         $('#id_business').select2();
 

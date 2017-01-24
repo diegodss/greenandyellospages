@@ -197,12 +197,13 @@
     <div class="col-xs-12">
         <h3>Jornada de trabalho:</h3>
         <table class="table">
-            @foreach ($working_days as $id => $day)
+            foreach ($working_days as $id => $day)
+            @foreach ($business_working_hour as $bwh)
             <tr>
-                <td>{!! Form::hidden('id_working_day[]', $id ,['class'=>'form-control']) !!}{{ $day }}</td>
-                <td>{!! Form::select('working_hour_status_'. $id, $working_day_status_s, null, array('id'=> 'working_hour_status_'. $id , 'class'=>'form-control') ) !!}</td>
-                <td>{!! Form::text('working_hour_time_start_' . $id ,null,['class'=>'form-control', 'id' => 'working_hour_time_start_' . $id]) !!}</td>
-                <td>{!! Form::text('working_hour_time_end_' . $id,null,['class'=>'form-control', 'id' => 'working_hour_time_start_' . $id]) !!}</td>
+                <td>{!! Form::hidden('id_working_day[]', $bwh->working_hour_day,['class'=>'form-control']) !!}{{ $working_days[$bwh->working_hour_day] }}</td>
+                <td>{!! Form::select('working_hour_status_'. $bwh->working_hour_day , $working_day_status_s, $bwh->working_hour_status, array('id'=> 'working_hour_status_'. $bwh->working_hour_day , 'class'=>'form-control') ) !!}</td>
+                <td>{!! Form::text('working_hour_time_start_' . $bwh->working_hour_day , $bwh->working_hour_time_start,['class'=>'form-control', 'id' => 'working_hour_time_start_' . $bwh->working_hour_day]) !!}</td>
+                <td>{!! Form::text('working_hour_time_end_' . $bwh->working_hour_day , $bwh->working_hour_time_end,['class'=>'form-control', 'id' => 'working_hour_time_end_' . $bwh->working_hour_day]) !!}</td>
             </tr>
             @endforeach
         </table>
@@ -219,6 +220,11 @@
             {!! Form::label('tag', 'Informe as etiquetas relevantes, separando-as com virgula.') !!}
             {!! Form::text('tag',null,['class'=>'form-control']) !!}
         </div>
+        <div class="form-group">
+            @foreach ($business_tag as $tag)
+            <span class='btn bg-olive btn-flat'>{{ $tag->tag_name }}</span>
+            @endforeach
+        </div>
 
 
     </div>
@@ -233,10 +239,30 @@
             {!! Form::label('Documentos') !!}
             {!! Form::file('media[]', ['multiple' => 'multiple']) !!}
         </div>
+        <div id="test"></div>
         @foreach ($business_media as $media)
-        {{ $media->media_name }}<br>
-        {{ $media->media_type }}<br>
-        {{ $media->media_path }}<br><br>
+
+        <?php
+        $file = $media->media_path . $media->media_name;
+        $file = str_replace("D:\Projects\laravel/public", "", $file);
+        ?>
+
+
+        <div id="business_media_{{ $media->id_business_media }}" class="business_media_item">
+
+            <a href="#{{ $media->id_business_media }}" data-token="{{ csrf_token() }}" class="btn_eliminar_media">Eliminar</a>
+            <a href="{{ url($file) }}" target="_blank" class="">ver</a>
+
+            <?php
+            if ($media->media_type == "jpg" || $media->media_type == "png" || $media->media_type == "gif") {
+                ?>
+                <img src="{{ url($file) }}" class="business_media_box" />
+            <?php } else { ?>
+                <div style="background-image:url({{ asset('img/ico/ico-'.$media->media_type .'.png') }});" class="business_media_box">
+
+                </div>
+            <?php } ?>
+        </div>
 
 
 

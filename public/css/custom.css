@@ -69,3 +69,5 @@ label.form-100, label.width-100 { width:100% !important}
 }
 
 
+.business_media_box { width:120px; height:120px;}
+.business_media_item { margin:4px; float:left;}

@@ -40,6 +40,7 @@ Route::post('password/reset', 'Auth\PasswordController@reset');
 
 
 Route::get('/business/search/list/', 'BusinessController@lists');
+Route::get('/business/search/list/{id}', 'BusinessController@detail');
 
 
 Route::group(['middleware' => ['auth']], function() {
@@ -63,6 +64,12 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('/business', 'BusinessController');
     Route::get('/business/delete/{id}', 'BusinessController@delete');
+
+
+    Route::resource('/business_media', 'BusinessMediaController');
+    Route::get('/business_media/delete/{id}', 'BusinessMediaController@delete');
+
+
 
     Route::resource('/category', 'CategoryController');
     Route::get('/category/delete/{id}', 'CategoryController@delete');

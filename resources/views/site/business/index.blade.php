@@ -13,7 +13,7 @@
 
 @foreach ($business as $bs)
 
-<div>{{ $bs->business_name}}</div>
+<div><a href="{{ url('/business/search/list/' . $bs->id_business) }}">{{ $bs->business_name}}</a></div>
 <div>{{ $bs->business_phone}}</div>
 
 

@@ -8,5 +8,5 @@ return [
     'analytics_code' => 'uywmasdklj',
     'items_page' => '25',
     'items_page_range' => array("10" => "10", "25" => "25", "50" => "50"),
-    'folder_business_media' => '/public/img/business_media/compromiso/',
+    'folder_business_media' => '/public/img/media/',
 ];
