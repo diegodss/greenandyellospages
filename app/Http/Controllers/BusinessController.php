@@ -99,16 +99,42 @@ class BusinessController extends Controller {
         $returnData["user"] = $user;
 
 
-        $roleMenuPermiso = $role->getRoleSubMenuPermiso(null);
-        $role = Role::lists('role', 'id_role');
-
-        $auditor = array("1" => "Diego", "2" => "Pepito Perez Sanches");
-        $active_directory = array("0" => "No", "1" => "Si");
+        $business_contact = new BusinessContact();
+        $returnData["business_contact"] = $business_contact;
 
 
+        $business_category = $business->categories()->lists('category.id_category')->all();
+        $returnData['business_category'] = $business_category;
 
-        $returnData['roleMenuPermiso'] = $roleMenuPermiso;
-        $returnData['role'] = $role;
+        $plans = Plan::active()->lists('plan_name', 'id_plan')->all();
+        $returnData['plans'] = $plans;
+
+        /* init variables */
+        $category_s = category::active()->lists('category_name', 'id_category')->all();
+        $returnData['category_s'] = $category_s;
+
+        $working_days = config("collection.working_days");
+        $returnData["working_days"] = $working_days;
+
+        $business_working_hour = BusinessWorkingHour::where('id_business', $id)->get();
+        $returnData['business_working_hour'] = $business_working_hour;
+
+
+
+        $business_type_s = config("collection.business_type");
+        $returnData["business_type_s"] = $business_type_s;
+
+        $business_entity_s = config("collection.business_entity");
+        $returnData["business_entity_s"] = $business_entity_s;
+
+        $business_scale_s = config("collection.business_scale");
+        $returnData["business_scale_s"] = $business_scale_s;
+
+        $working_day_status_s = config("collection.working_day_status");
+        $returnData["working_day_status_s"] = $working_day_status_s;
+
+        $document_type_s = config("collection.document_type");
+        $returnData["document_type_s"] = $document_type_s;
 
         $returnData['title'] = $this->title;
         $returnData['subtitle'] = $this->subtitle;
@@ -157,12 +183,20 @@ class BusinessController extends Controller {
 
     public function save_business_contact($id, $request) {
 
-        $business_contact = new BusinessContact();
+        if ($request->id_business_contact != "") {
+            $business_contact = BusinessContact::where('id_business_contact', $request->id_business_contact)->first();
+            Log::info("A");
+        } else {
+            $business_contact = new BusinessContact();
+            Log::info("B");
+        }
+
         $business_contact->id_business = $id;
         $business_contact->contact_name = $request->contact_name;
         $business_contact->contact_document_type = $request->contact_document_type;
         $business_contact->contact_document = $request->contact_document;
         $business_contact->contact_phone = $request->contact_phone;
+        $business_contact->contact_email = $request->contact_email;
         $business_contact->save();
     }
 
@@ -203,6 +237,9 @@ class BusinessController extends Controller {
         $returnData["business_contact"] = $business_contact;
 
 
+        $business_category = $business->categories()->lists('category.id_category')->all();
+        $returnData['business_category'] = $business_category;
+
         $business_media = BusinessMedia::where('id_business', $id)->get();
         //Log::info("MEDIA");
         //Log::info($business_media);
@@ -217,14 +254,15 @@ class BusinessController extends Controller {
         $category_s = category::active()->lists('category_name', 'id_category')->all();
         $returnData['category_s'] = $category_s;
 
-        $business_category = $business->categories()->lists('category.id_category')->all();
-        $returnData['business_category'] = $business_category;
+
+
+
+
+        /* init variables */
 
         $plans = Plan::active()->lists('plan_name', 'id_plan')->all();
         $returnData['plans'] = $plans;
 
-
-        /* init variables */
         $working_days = config("collection.working_days");
         $returnData["working_days"] = $working_days;
 
@@ -241,34 +279,8 @@ class BusinessController extends Controller {
         $working_day_status_s = config("collection.working_day_status");
         $returnData["working_day_status_s"] = $working_day_status_s;
 
-
-
-        /* init variables */
-
-
-
         $document_type_s = config("collection.document_type");
         $returnData["document_type_s"] = $document_type_s;
-
-
-
-        /*
-          $i = 0;
-          //for ($i = 0; $i <= count($category); $i++) {
-          foreach ($category as $id_category => $category_name) {
-          $checked = false;
-          if (is_array($business_category))
-          $checked = in_array($id_category, $business_category);
-
-          $i++;
-          $cat_arr[$i]["name"] = $category_name;
-          $cat_arr[$i]["id"] = $id_category;
-          $cat_arr[$i]["test"] = $checked;
-          }
-          Log::info($cat_arr);
-          //$allowed = $role->permissions->lists('id');
-         */
-
 
         $returnData['title'] = $this->title;
         $returnData['subtitle'] = $this->subtitle;
@@ -397,7 +409,7 @@ class BusinessController extends Controller {
 
         $this->save_working_hour($id, $request);
 
-        //$this->save_business_contact($id, $request);
+        $this->save_business_contact($id, $request);
 
         $this->save_business_tag($id, $request);
 

@@ -94,6 +94,19 @@ class UsuarioController extends Controller {
         return View::make('usuario.create', $returnData)->withModel($usuario);
     }
 
+    public function novo() {
+
+        $usuario = New Usuario;
+        $returnData['usuario'] = $usuario;
+
+
+
+        $returnData['title'] = $this->title;
+        $returnData['subtitle'] = $this->subtitle;
+        $returnData['titleBox'] = "Create Usuario";
+        return View::make('site.usuario.create', $returnData)->withModel($usuario);
+    }
+
     public function store(UsuarioRequest $request) {
         $this->validate($request, [
             'name' => 'required',

@@ -250,8 +250,10 @@
 
         <div id="business_media_{{ $media->id_business_media }}" class="business_media_item">
 
-            <a href="#{{ $media->id_business_media }}" data-token="{{ csrf_token() }}" class="btn_eliminar_media">Eliminar</a>
-            <a href="{{ url($file) }}" target="_blank" class="">ver</a>
+            <div class="business_media_action_bar">
+                <a href="#{{ $media->id_business_media }}" data-token="{{ csrf_token() }}" class="btn_eliminar_media btn btn-primary btn-xs" title="Visualizar"><i class='fa fa-eye'></i></a>
+                <a href="{{ url($file) }}" target="_blank" class="btn btn-danger btn-xs" title="Deletar"><i class='fa fa-trash-o'></i></a>
+            </div>
 
             <?php
             if ($media->media_type == "jpg" || $media->media_type == "png" || $media->media_type == "gif") {

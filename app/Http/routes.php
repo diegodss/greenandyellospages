@@ -51,6 +51,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('/usuario', 'UsuarioController');
     Route::get('/usuario/delete/{id}', 'UsuarioController@delete');
 
+    Route::resource('/usuario/novo/signup', 'UsuarioController@novo');
+
+
     Route::resource('/role', 'RoleController');
     Route::get('/role/delete/{id}', 'RoleController@delete');
     Route::get('/role/get/json/', 'RoleController@ajaxRole');
@@ -64,7 +67,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('/business', 'BusinessController');
     Route::get('/business/delete/{id}', 'BusinessController@delete');
-
+    Route::get('/business/create/{id_hallazgo}', 'BusinessController@create');
 
     Route::resource('/business_media', 'BusinessMediaController');
     Route::get('/business_media/delete/{id}', 'BusinessMediaController@delete');
