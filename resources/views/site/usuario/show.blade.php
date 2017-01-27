@@ -9,8 +9,8 @@ $show_view = true;
 $readonly = "css class";
 $action = "show";
 ?>
-@include('usuario.form_open_edit')
-@include('usuario.form')
+@include('site.usuario.form_open_edit')
+@include('site.usuario.form')
 
 @include('layouts.boxbottom')
 @endsection

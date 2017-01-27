@@ -18,8 +18,8 @@ Route::post('login', 'Auth\AuthController@login');
 Route::get('logout', 'Auth\AuthController@logout');
 
 // este bloque esta aca para desactivar las rutas para register
-//Route::get('register', 'Auth\AuthController@showRegistrationForm');
-//Route::post('register', 'Auth\AuthController@register');
+Route::get('register', 'Auth\AuthController@showRegistrationForm');
+Route::post('register', 'Auth\AuthController@register');
 // Password Reset Routes...
 
 Route::get('password/reset/{token?}', 'Auth\PasswordController@showResetForm');
@@ -38,6 +38,7 @@ Route::post('password/reset', 'Auth\PasswordController@reset');
   Route::get('/business/search/list/', 'BusinessController@lists');
   }); */
 
+Route::get('user/activation/{token}', 'Auth\AuthController@activateUser')->name('user.activate');
 
 Route::get('/business/search/list/', 'BusinessController@lists');
 Route::get('/business/search/list/{id}', 'BusinessController@detail');
@@ -51,7 +52,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('/usuario', 'UsuarioController');
     Route::get('/usuario/delete/{id}', 'UsuarioController@delete');
 
-    Route::resource('/usuario/novo/signup', 'UsuarioController@novo');
+    Route::resource('/usuario/novo/signup', 'UsuarioController@signUpForm');
+    Route::resource('/usuario/novo/gravar', 'UsuarioController@signUpSave');
 
 
     Route::resource('/role', 'RoleController');
@@ -68,6 +70,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('/business', 'BusinessController');
     Route::get('/business/delete/{id}', 'BusinessController@delete');
     Route::get('/business/create/{id_hallazgo}', 'BusinessController@create');
+
 
     Route::resource('/business_media', 'BusinessMediaController');
     Route::get('/business_media/delete/{id}', 'BusinessMediaController@delete');

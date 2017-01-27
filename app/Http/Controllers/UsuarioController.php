@@ -94,7 +94,7 @@ class UsuarioController extends Controller {
         return View::make('usuario.create', $returnData)->withModel($usuario);
     }
 
-    public function novo() {
+    public function signUpForm() {
 
         $usuario = New Usuario;
         $returnData['usuario'] = $usuario;
@@ -105,6 +105,39 @@ class UsuarioController extends Controller {
         $returnData['subtitle'] = $this->subtitle;
         $returnData['titleBox'] = "Create Usuario";
         return View::make('site.usuario.create', $returnData)->withModel($usuario);
+    }
+
+    public function signUpSave(UsuarioRequest $request) {
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+        ]);
+
+
+
+        $usuario = array(
+            "name" => $request['name']
+            , "email" => $request['email']
+            , "password" => bcrypt($request['password'])
+            , "id_role" => 2
+            , "usuario_registra" => $request['usuario_registra']
+            , "usuario_modifica" => $request['usuario_modifica']
+            , "fl_status" => false
+        );
+
+        $usuario_new = Usuario::create($usuario);
+
+        $link_activation = "";
+        $data["name"] = $request['name'];
+        $data["auditor"] = $link_activation;
+        $data["auditor"] = $request['email'];
+
+        Mail::send('email.ativar_usuario', $data, function ($message) {
+            $message->to('diegodss@gmail.com', 'example_name')->subject('Welcome!');
+        });
+
+
+        return $this->edit($usuario_new->id, true);
     }
 
     public function store(UsuarioRequest $request) {

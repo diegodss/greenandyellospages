@@ -4,8 +4,8 @@
 
 @include('layouts.boxtop')
 
-@include('usuario.form_open_create')
-@include('usuario.form')
+@include('site.usuario.form_open_create')
+@include('site.usuario.form')
 
 @include('layouts.boxbottom')
 @endsection

@@ -9,15 +9,17 @@ use DB;
 use \stdClass;
 
 class User extends Authenticatable {
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
 
-      protected $fillable = [
-      'name', 'email', 'password',
-      ];
+
      */
+    protected $fillable = [
+        'name', 'email', 'password', 'id_role', 'active_directory', 'active_directory_user', 'remember_token', 'activated', '',
+    ];
 
     /**
      * The attributes that should be hidden for arrays.

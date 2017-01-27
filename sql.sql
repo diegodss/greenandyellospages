@@ -289,15 +289,11 @@ CREATE TABLE user_book (
 )
 COMMENT='';
 
-CREATE TABLE  (
-	id_ INT(11) NOT NULL AUTO_INCREMENT,
-	
-	, fl_status TINYINT(1) NULL DEFAULT '1'
+CREATE TABLE user_activations (
+	user_id INT(11) NOT NULL
+	, token VARCHAR(255) NULL DEFAULT NULL
 	, created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP
-	, updated_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-	, usuario_registra INT(11) NULL DEFAULT '0'
-	, usuario_modifica INT(11) NULL DEFAULT '0'
-	PRIMARY KEY (id_)
+	, PRIMARY KEY (user_id)
 )
 COMMENT='';
 
